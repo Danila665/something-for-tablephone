@@ -24,6 +24,17 @@ public class IndexController implements Controller {
                 "</head>",
                 "<body>",
                     "<h1>Tablephone</h1>",
+                     "<table>",
+                        "<tr>",
+                            "<td>" +"danila" + "</td>",
+                            "<td>" +"7909555555" + "</td>",
+                        "</tr>",
+                      "</table>",
+                      "<form method=\"post\">",
+                            "<input type=\"text\">",
+                            "<input type=\"text\">",
+                            "<button>Send</button>",
+                      "</form>",
                 "</body>",
             "</html>"
         );

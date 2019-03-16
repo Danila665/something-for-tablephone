@@ -7,37 +7,31 @@ package com.tropin.tablephone;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import com.tropin.tablephone.interfaces.Controller;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
  * @author Danila
  */
-public class FaviconController implements Controller{
+public class FaviconController implements Controller {
     
     @Override
     public void process(HttpExchange he) throws IOException {
-        Headers responseHeaders = he.getResponseHeaders();
-        File fi = new File("E:\\favicon.ico");
-        byte[] fileContent = Files.readAllBytes(fi.toPath());
-        
-        String responseStr = String.join(
-            "<!DOCTYPE html>",
-            "<html>",
-                "<head>",
-                    "<title>FaviconPage</title>",
-                "</head>",
-                "<body>",
-                    "<h1>Prepare for download</h1>",
-                "</body>",
-            "</html>"
-        );
-        
-        responseHeaders.set("content-type", "image/x-icon");
-        he.sendResponseHeaders(200, fileContent.length);
-        he.getResponseBody().write(fileContent);
-        he.close();
+        try {
+            Path file = Paths.get(getClass().getResource("/resources/img/favicon.ico").toURI());
+            he.getResponseHeaders().set("content-type", "image/x-icon");
+            he.sendResponseHeaders(200, file.toFile().length());
+            Files.copy(file, he.getResponseBody());
+            he.close();    
+        } catch (URISyntaxException e) {
+           throw new IOException(e);
+        }
     }
 }

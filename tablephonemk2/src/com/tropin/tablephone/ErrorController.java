@@ -6,6 +6,8 @@
 package com.tropin.tablephone;
 
 import com.sun.net.httpserver.HttpExchange;
+import com.tropin.tablephone.interfaces.Controller;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -15,7 +17,6 @@ import java.io.StringWriter;
  * @author Danila
  */
 public class ErrorController implements Controller {
-    public static String ERROR_ATTR = "error";
 
     @Override
     public void process(HttpExchange he) throws IOException {

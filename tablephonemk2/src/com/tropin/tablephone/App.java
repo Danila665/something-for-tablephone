@@ -21,7 +21,7 @@ public class App {
      */
     public static void main(String[] args) throws IOException{
 
-        HttpServer httpServer = HttpServer.create(new InetSocketAddress(8081), 0);
+        HttpServer httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
         
         final Router router = new StupidRouter();
         final Controller errorController = new ErrorController();

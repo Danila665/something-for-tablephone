@@ -27,14 +27,14 @@ public class Utils {
         for (String param : params) {
             idx = param.indexOf("=");
             paramName = (idx > 0 ? param.substring(0, idx) : param);
-            paramName = URLDecoder.decode(paramName, "utf-8");
+            paramName = URLDecoder.decode(paramName, "UTF-8");
 
             if (paramName.isEmpty()) {
                 continue;
             }
 
             paramValue = (idx > 0 ? param.substring(idx + 1) : "");
-            paramValue = URLDecoder.decode(paramValue, "utf-8");
+            paramValue = URLDecoder.decode(paramValue, "UTF-8");
 
             paramValues = parsedQuery.get(paramName);
             if (paramValues == null) {

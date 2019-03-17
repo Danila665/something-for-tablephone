@@ -20,7 +20,9 @@ import java.util.Scanner;
  * @author Danila
  */
 public class IndexController implements Controller {
-
+    String name;
+    String number;
+    
     @Override
     public void process(HttpExchange he) throws IOException {
         
@@ -28,20 +30,21 @@ public class IndexController implements Controller {
             InputStream isr = he.getRequestBody();
             Scanner s = new Scanner(isr).useDelimiter("\\A");            
             String requestBody = s.hasNext() ? s.next() : "";
-            String decodedBody = URLDecoder.decode(requestBody, "UTF-8");
+            //String decodedBody = URLDecoder.decode(requestBody, "UTF-8");
 
             Map<String, String> result = new HashMap<>();  
-            for (String param : decodedBody.split("&")) {
+            for (String param : requestBody.split("&")) {
                 String[] entry = param.split("=");
                 if (entry.length > 1) {
-                    result.put(entry[0], entry[1]);
+                    result.put(URLDecoder.decode(entry[0], "UTF-8"), URLDecoder.decode(entry[1], "UTF-8"));
                 }else{
-                    result.put(entry[0], "");
+                    result.put(URLDecoder.decode(entry[0], "UTF-8"), "");
                 }
             }
-
-            System.out.println("Decoded = " + decodedBody + "\nMap = " + result);
+            name = result.get("name");
+            number = result.get("number");
         }
+        
         String responseStr = String.join(
             "<!DOCTYPE html>",
             "<html>",
@@ -53,8 +56,8 @@ public class IndexController implements Controller {
                     "<h1>Tablephone</h1>",
                      "<table>",
                         "<tr>",
-                            "<td>" +"danila" + "</td>",
-                            "<td>" +"7909555555" + "</td>",
+                            "<td>" +name + "</td>",
+                            "<td>" +number + "</td>",
                         "</tr>",
                       "</table>",
                       "<form method=\"post\">",

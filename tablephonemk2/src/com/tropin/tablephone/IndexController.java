@@ -7,15 +7,40 @@ package com.tropin.tablephone;
 
 import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  *
  * @author Danila
  */
 public class IndexController implements Controller {
-
+    
+        public Map<String, String> queryToMap(String query) {
+        Map<String, String> result = new HashMap<>();
+        for (String param : query.split("&")) {
+            String[] entry = param.split("=");
+            if (entry.length > 1) {
+                result.put(entry[0], entry[1]);
+            }else{
+                result.put(entry[0], "");
+            }
+        }
+    return result;
+}
     @Override
     public void process(HttpExchange he) throws IOException {
+        
+        InputStream isr = he.getRequestBody();
+        Scanner s = new Scanner(isr).useDelimiter("\\A");            
+        String result = s.hasNext() ? s.next() : "";
+        
+        System.out.println("result = " +queryToMap(result));
+
+        
         String responseStr = String.join(
             "<!DOCTYPE html>",
             "<html>",

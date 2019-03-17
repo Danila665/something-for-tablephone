@@ -1,5 +1,6 @@
 package com.tropin.tablephone;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 public class Utils {
 
-    public static Map<String, List<String>> parseQueryString(String query) {
+    public static Map<String, List<String>> parseQueryString(String query) throws UnsupportedEncodingException{
         if (query == null) {
             return Collections.emptyMap();
         }
@@ -26,14 +27,14 @@ public class Utils {
         for (String param : params) {
             idx = param.indexOf("=");
             paramName = (idx > 0 ? param.substring(0, idx) : param);
-            paramName = URLDecoder.decode(paramName, StandardCharsets.UTF_8);
+            paramName = URLDecoder.decode(paramName, "utf-8");
 
-            if (paramName.isBlank()) {
+            if (paramName.isEmpty()) {
                 continue;
             }
 
             paramValue = (idx > 0 ? param.substring(idx + 1) : "");
-            paramValue = URLDecoder.decode(paramValue, StandardCharsets.UTF_8);
+            paramValue = URLDecoder.decode(paramValue, "utf-8");
 
             paramValues = parsedQuery.get(paramName);
             if (paramValues == null) {

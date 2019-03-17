@@ -20,11 +20,12 @@ import java.util.Scanner;
  */
 public class IndexController implements Controller {
     
-    private List<String> errors = new ArrayList<>();
-    private List<Contact> contacts = new ArrayList<>();
-    String name;
-    String number;
-    String regex = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
+    private final List<String> errors = new ArrayList<>();
+    private final List<Contact> contacts = new ArrayList<>();
+    private boolean isGood = true;
+    private String name;
+    private String number;
+    private String regex = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
     
     @Override
     public void process(HttpExchange he) throws IOException {
@@ -38,37 +39,38 @@ public class IndexController implements Controller {
             number = Utils.parseQueryString(requestBody).get("number").get(0);
             
             Contact contact = new Contact();
-            boolean isGood = true;
+            
             
             if (name == null || name.isEmpty() || name.equals("")){
                 isGood = false;
-                errors.add("Поле не может быть пустым");
+                errors.add("Поле для имени должно быть заполнено");
             }
             if (number == null || number.isEmpty() || number.equals("")){
                 isGood = false;
-                errors.add("Поле не может быть пустым");
+                errors.add("Пожалуйста, введите номер телефона");
             }
             if (number != null &&  !number.matches(regex)){
                 isGood = false;
-                errors.add("Введенный телефонный номер не является верным!");
+                errors.add("Введенный телефонный номер (" + number + ") не является верным");
             }
             if (isGood == true){
                 contact.setName(name);
                 contact.setNumber(number);
                 contacts.add(contact);
+                errors.clear();
             }
         }
-
+        isGood = true;
         String contactStr = "";
         if (contacts.size() > 0){
             for (Contact c : contacts){
-                contactStr += "<tr><td>" + c.getName() + "</td>" + "<td>" + c.getNumber() + "</td></tr>";
+                contactStr += "<tr><td>" + c.getName() + "</td><td>" + c.getNumber() + "</td></tr>";
             }
         }
         String errorsStr = "";
         if (errors.size() > 0){
             for (String s : errors){
-                errorsStr += "<ul><li>" + s.toString() + "</li></ul>";
+                errorsStr += "<ul><li><font color=\"Red\">" + s.toString() + "</font></li></ul>";
             }
         }
         
@@ -86,8 +88,8 @@ public class IndexController implements Controller {
                      contactStr,
                       "</table>",
                       "<form method=\"post\">",
-                            "<input type=\"text\" name=\"name\">",
-                            "<input type=\"text\" name=\"number\">",
+                            "<input type=\"text\" placeholder=\"Введите ваше имя\" name=\"name\">",
+                            "<input type=\"text\" placeholder=\"Введите номер телефона\" name=\"number\">",
                             "<button>Send</button>",
                       "</form>",
                 "</body>",

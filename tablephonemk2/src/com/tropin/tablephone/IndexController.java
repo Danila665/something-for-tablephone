@@ -10,9 +10,8 @@ import com.tropin.tablephone.interfaces.Controller;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -20,6 +19,9 @@ import java.util.Scanner;
  * @author Danila
  */
 public class IndexController implements Controller {
+    
+    private List<String> errors = new ArrayList<>();
+    private List<Contact> contacts = new ArrayList<>();
     String name;
     String number;
     
@@ -30,19 +32,32 @@ public class IndexController implements Controller {
             InputStream isr = he.getRequestBody();
             Scanner s = new Scanner(isr).useDelimiter("\\A");            
             String requestBody = s.hasNext() ? s.next() : "";
-            //String decodedBody = URLDecoder.decode(requestBody, "UTF-8");
-
-            Map<String, String> result = new HashMap<>();  
-            for (String param : requestBody.split("&")) {
-                String[] entry = param.split("=");
-                if (entry.length > 1) {
-                    result.put(URLDecoder.decode(entry[0], "UTF-8"), URLDecoder.decode(entry[1], "UTF-8"));
-                }else{
-                    result.put(URLDecoder.decode(entry[0], "UTF-8"), "");
-                }
+            
+            name = Utils.parseQueryString(requestBody).get("name").get(0);
+            number = Utils.parseQueryString(requestBody).get("number").get(0);
+            
+            if (name.equals("5")){
+                errors.add("Поле не может быть пустым");
+                
             }
-            name = result.get("name");
-            number = result.get("number");
+            Contact contact = new Contact();
+            contact.setName(name);
+            contact.setNumber(number);
+            contacts.add(contact);
+            
+        }
+        
+        String contactStr = "";
+        if (contacts.size() > 0){
+            for (Contact c : contacts){
+                contactStr += "<tr><td>" + c.getName() + "</td>" + "<td>" + c.getNumber() + "</td></tr>";
+            }
+        }
+        String errorsStr = "";
+        if (errors.size() > 0){
+            for (String s : errors){
+                errorsStr += "<ul><li>" + s.toString() + "</li></ul>";
+            }
         }
         
         String responseStr = String.join(
@@ -54,11 +69,9 @@ public class IndexController implements Controller {
                 "</head>",
                 "<body>",
                     "<h1>Tablephone</h1>",
+                    errorsStr,
                      "<table>",
-                        "<tr>",
-                            "<td>" +name + "</td>",
-                            "<td>" +number + "</td>",
-                        "</tr>",
+                     contactStr,
                       "</table>",
                       "<form method=\"post\">",
                             "<input type=\"text\" name=\"name\">",
@@ -70,6 +83,7 @@ public class IndexController implements Controller {
         );
 
         he.sendResponseHeaders(200, responseStr.length());
+        System.out.println(""+responseStr.length());
         he.getResponseBody().write(responseStr.getBytes());
         he.close(); 
     } 

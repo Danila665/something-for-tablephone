@@ -24,6 +24,7 @@ public class IndexController implements Controller {
     private List<Contact> contacts = new ArrayList<>();
     String name;
     String number;
+    String regex = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
     
     @Override
     public void process(HttpExchange he) throws IOException {
@@ -36,17 +37,28 @@ public class IndexController implements Controller {
             name = Utils.parseQueryString(requestBody).get("name").get(0);
             number = Utils.parseQueryString(requestBody).get("number").get(0);
             
-            if (name.equals("5")){
-                errors.add("Поле не может быть пустым");
-                
-            }
             Contact contact = new Contact();
-            contact.setName(name);
-            contact.setNumber(number);
-            contacts.add(contact);
+            boolean isGood = true;
             
+            if (name == null || name.isEmpty() || name.equals("")){
+                isGood = false;
+                errors.add("Поле не может быть пустым");
+            }
+            if (number == null || number.isEmpty() || number.equals("")){
+                isGood = false;
+                errors.add("Поле не может быть пустым");
+            }
+            if (number != null &&  !number.matches(regex)){
+                isGood = false;
+                errors.add("Введенный телефонный номер не является верным!");
+            }
+            if (isGood == true){
+                contact.setName(name);
+                contact.setNumber(number);
+                contacts.add(contact);
+            }
         }
-        
+
         String contactStr = "";
         if (contacts.size() > 0){
             for (Contact c : contacts){
@@ -82,7 +94,7 @@ public class IndexController implements Controller {
             "</html>"
         );
 
-        he.sendResponseHeaders(200, responseStr.length());
+        he.sendResponseHeaders(200, responseStr.getBytes().length);
         System.out.println(""+responseStr.length());
         he.getResponseBody().write(responseStr.getBytes());
         he.close(); 

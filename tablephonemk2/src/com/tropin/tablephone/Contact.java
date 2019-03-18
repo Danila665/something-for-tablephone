@@ -5,6 +5,8 @@
  */
 package com.tropin.tablephone;
 
+import java.util.Optional;
+
 /**
  *
  * @author Danila
@@ -18,12 +20,12 @@ public class Contact {
         return id;
     }
     
-    public String getName(){
-        return name;
+    public Optional<String> getName(){
+        return Optional.ofNullable(name);
     }
     
-    public String getNumber(){
-        return number;
+    public Optional<String> getNumber(){
+        return Optional.ofNullable(number);
     }
     
     public void setId(int id){

@@ -19,9 +19,9 @@ public class StupidRouter implements Router {
     final private Controller indexController;
     final private Controller faviconController;
     
-    public StupidRouter() {
-        this.indexController = new IndexController();
-        this.faviconController = new FaviconController();
+    public StupidRouter(Controller indexController, Controller faviconController) {
+        this.indexController = indexController;
+        this.faviconController = faviconController;
     }
 
     @Override
@@ -36,6 +36,5 @@ public class StupidRouter implements Router {
         
         return Optional.empty();
     }
-    
-    
+
 }

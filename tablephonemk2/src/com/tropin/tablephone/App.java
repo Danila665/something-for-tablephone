@@ -26,7 +26,7 @@ public class App {
 
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
         
-        final Router router = new StupidRouter();
+        final Router router = new StupidRouter(new IndexController(new ContactMemoryStorage()), new FaviconController());
         final Controller errorController = new ErrorController();
         final Controller notFoundController = new NotFoundController();
         

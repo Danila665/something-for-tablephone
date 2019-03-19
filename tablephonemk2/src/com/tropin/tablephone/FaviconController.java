@@ -5,11 +5,9 @@
  */
 package com.tropin.tablephone;
 
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.tropin.tablephone.interfaces.Controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;

@@ -6,6 +6,7 @@
 package com.tropin.tablephone;
 
 import com.sun.net.httpserver.HttpExchange;
+import com.tropin.tablephone.interfaces.ContactStorage;
 import com.tropin.tablephone.interfaces.Controller;
 
 import java.io.IOException;
@@ -23,6 +24,9 @@ public class IndexController implements Controller {
     private String regex = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
 
     public IndexController(ContactStorage contactStorage) {
+        //java.util.Objects.requireNonNull(contactStorage);
+        //java.util.Objects.requireNonNull(contactStorage, "Contact storage must not be null");
+        //java.util.Objects.requireNonNullElse(contactStorage, new ContactMemoryStorage());
         if (contactStorage == null) {
             throw new IllegalArgumentException("Contact storage must not be null");
         }

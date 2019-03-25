@@ -25,7 +25,7 @@ public class App {
 
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
         
-       // httpServer.createContext("/", new Handler()); - почему то перетираются записи по
+       // httpServer.createContext("/", new Handler()); - почему то перетираются записи по!!!
         
         final Router router = new StupidRouter(new IndexController(new ContactMemoryStorage()), new FaviconController());
         final Controller errorController = new ErrorController();

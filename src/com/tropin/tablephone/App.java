@@ -25,9 +25,12 @@ public class App {
 
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
         
-       // httpServer.createContext("/", new Handler()); - почему то перетираются записи по!!!
+        httpServer.createContext("/", new Handler(
+                new StupidRouter(new IndexController(new ContactMemoryStorage()), new FaviconController()),
+                new ErrorController(), 
+                new NotFoundController()));
         
-        final Router router = new StupidRouter(new IndexController(new ContactMemoryStorage()), new FaviconController());
+       /* final Router router = new StupidRouter(new IndexController(new ContactMemoryStorage()), new FaviconController());
         final Controller errorController = new ErrorController();
         final Controller notFoundController = new NotFoundController();
         
@@ -39,7 +42,7 @@ public class App {
                 he.setAttribute(HttpExchangeAttributesEnum.Error.name(), e);
                 errorController.process(he);
             }
-        });
+        });*/
         httpServer.start();
         
         

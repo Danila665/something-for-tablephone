@@ -17,13 +17,19 @@ import java.io.IOException;
  */
 public class Handler implements HttpHandler{
 
+    private final Router router;
+    private final Controller errorController;
+    private final Controller notFoundController;
+
+    public Handler(Router router, Controller errorController, Controller notFoundController) {
+        this.router  = router;
+        this.errorController  = errorController;
+        this.notFoundController  = notFoundController;
+    }
+    
     @Override
     public void handle(HttpExchange he) throws IOException {
         
-        final Router router = new StupidRouter(new IndexController(new ContactMemoryStorage()), new FaviconController());
-        final Controller errorController = new ErrorController();
-        final Controller notFoundController = new NotFoundController();
-       
         try {
             router.resolve(he.getRequestURI().getPath())
                 .orElse(notFoundController).process(he);

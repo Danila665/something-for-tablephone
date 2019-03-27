@@ -29,8 +29,8 @@ public class Handler implements HttpHandler{
     
     @Override
     public void handle(HttpExchange he) throws IOException {
-        
-        try {
+
+            try {
             router.resolve(he.getRequestURI().getPath())
                 .orElse(notFoundController).process(he);
             } catch (IOException e) {

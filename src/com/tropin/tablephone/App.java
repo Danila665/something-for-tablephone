@@ -10,6 +10,7 @@ import com.tropin.tablephone.interfaces.Controller;
 import com.tropin.tablephone.interfaces.Router;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Optional;
 
 
 /**
@@ -24,9 +25,14 @@ public class App {
     public static void main(String[] args) throws IOException{
 
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
+        NotSoStupidRouter router = new NotSoStupidRouter();
+        
+        router.addRoute("/", Optional.of(new IndexController(new ContactMemoryStorage())));
+        router.addRoute("/favicon.ico", Optional.of(new FaviconController()));
         
         httpServer.createContext("/", new Handler(
-                new StupidRouter(new IndexController(new ContactMemoryStorage()), new FaviconController()),
+                //new StupidRouter(new IndexController(new ContactMemoryStorage()), new FaviconController()),
+                router,
                 new ErrorController(), 
                 new NotFoundController()));
         

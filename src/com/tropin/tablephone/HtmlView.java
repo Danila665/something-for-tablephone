@@ -33,13 +33,14 @@ public class HtmlView {
 
         String errorsStr = "";
         for (String s : errors.values()) {
-            errorsStr += "<li><font color=\"Red\">" + s.toString() + "</font></li>";
+            errorsStr += "<li class=\"text-error\">" + s.toString() + "</li>";
         }
         
         output = String.join(
             "<!DOCTYPE html>",
             "<html>",
                 "<head>",
+                    "<link rel=\"stylesheet\"  type=\"text/css\" href=\"style.css\">",
                     "<meta charset=\"UTF-8\">",
                     "<title>Tablephone</title>",
                 "</head>",
@@ -52,8 +53,8 @@ public class HtmlView {
                      contactStr,
                       "</table>",
                       "<form method=\"post\">",
-                            "<input type=\"text\" placeholder=\"Введите ваше имя\" name=\"name\" value=\"" + contact.getName().orElse("") + "\" " + (errors.containsKey("name") ? " style=\"border-color:red;\" " : "") + " >",
-                            "<input type=\"text\" placeholder=\"Введите номер телефона\" name=\"number\" value=\"" + contact.getNumber().orElse("") + "\" " + (errors.containsKey("number") ? " style=\"border-color:red;\" " : "") + " >",
+                            "<input type=\"text\" placeholder=\"Введите ваше имя\" name=\"name\" value=\"" + contact.getName().orElse("") + "\" " + (errors.containsKey("name") ? " class=\"input-error\" " : "") + " >",
+                            "<input type=\"text\" placeholder=\"Введите номер телефона\" name=\"number\" value=\"" + contact.getNumber().orElse("") + "\" " + (errors.containsKey("number") ? " class=\"input-error\" " : "") + " >",
                             "<button>Send</button>",
                       "</form>",
                 "</body>",

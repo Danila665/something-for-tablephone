@@ -37,9 +37,5 @@ public class Handler implements HttpHandler{
                 he.setAttribute(HttpExchangeAttributesEnum.Error.name(), e);
                 errorController.process(he);
             }
-        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
+    }  
 }

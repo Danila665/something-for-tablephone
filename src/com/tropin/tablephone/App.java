@@ -29,6 +29,7 @@ public class App {
         
         router.addRoute("/", (new IndexController(new ContactMemoryStorage())));
         router.addRoute("/favicon.ico", new FaviconController());
+        router.addRoute("/style.css", new StaticController("/resources/img/style.css"));
         
         httpServer.createContext("/", new Handler(
                 router,

@@ -25,10 +25,8 @@ public class NotSoStupidRouter implements Router{
     
     @Override
     public Optional<Controller> resolve(String uri) {
-       /* if (routes.get(uri) == null){
-            return Optional.of(new NotFoundController());
-        }*/
-        return routes.get(uri);
+        return Optional.ofNullable(routes.get(uri)).orElse(Optional.empty());
+        //return Optional.of(routes.get(uri)).orElse(Optional.empty()); - выяснить, почему не работает
     }
     
 }

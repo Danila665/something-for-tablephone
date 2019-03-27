@@ -27,11 +27,10 @@ public class App {
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
         NotSoStupidRouter router = new NotSoStupidRouter();
         
-        router.addRoute("/", Optional.of(new IndexController(new ContactMemoryStorage())));
-        router.addRoute("/favicon.ico", Optional.of(new FaviconController()));
+        router.addRoute("/", (new IndexController(new ContactMemoryStorage())));
+        router.addRoute("/favicon.ico", new FaviconController());
         
         httpServer.createContext("/", new Handler(
-                //new StupidRouter(new IndexController(new ContactMemoryStorage()), new FaviconController()),
                 router,
                 new ErrorController(), 
                 new NotFoundController()));

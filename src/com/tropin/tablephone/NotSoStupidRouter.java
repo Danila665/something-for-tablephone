@@ -17,16 +17,15 @@ import java.util.Optional;
  */
 public class NotSoStupidRouter implements Router{
     
-    private final Map<String, Optional<Controller>> routes = new HashMap<>(); 
+    private final Map<String, Controller> routes = new HashMap<>(); 
     
-    public void addRoute(String string, Optional<Controller> controller){
+    public void addRoute(String string,Controller controller){
         routes.put(string, controller);
     }
     
     @Override
     public Optional<Controller> resolve(String uri) {
-        return Optional.ofNullable(routes.get(uri)).orElse(Optional.empty());
-        //return Optional.of(routes.get(uri)).orElse(Optional.empty()); - выяснить, почему не работает
+        return Optional.ofNullable(routes.get(uri));
     }
     
 }

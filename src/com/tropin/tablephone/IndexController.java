@@ -26,9 +26,6 @@ public class IndexController implements Controller {
     private String regex = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
 
     public IndexController(ContactStorage contactStorage) {
-        //java.util.Objects.requireNonNull(contactStorage);
-        //java.util.Objects.requireNonNull(contactStorage, "Contact storage must not be null");
-        //java.util.Objects.requireNonNullElse(contactStorage, new ContactMemoryStorage());
         if (contactStorage == null) {
             throw new IllegalArgumentException("Contact storage must not be null");
         }
@@ -73,7 +70,6 @@ public class IndexController implements Controller {
         String responseStr = htmlview.generate(paramsMap);
 
         he.sendResponseHeaders(200, responseStr.getBytes().length);
-        System.out.println(""+responseStr.length());
         he.getResponseBody().write(responseStr.getBytes());
         he.close(); 
     } 

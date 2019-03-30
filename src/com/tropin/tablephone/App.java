@@ -10,6 +10,8 @@ import com.tropin.tablephone.interfaces.Controller;
 import com.tropin.tablephone.interfaces.Router;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Optional;
 
 
@@ -27,31 +29,17 @@ public class App {
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
         NotSoStupidRouter router = new NotSoStupidRouter();
         
-        router.addRoute("/", (new IndexController(new ContactMemoryStorage())));
-        router.addRoute("/favicon.ico", new FaviconController());
-        router.addRoute("/style.css", new StaticController("/resources/img/style.css"));
+        //router.addRoute("/", (new IndexController(new ContactMemoryStorage())));
+        router.addRoute("/", (new IndexController(new DbContactStorage())));
+        router.addRoute("/favicon.ico", new StaticController("/resources/img/favicon.ico"));
+        router.addRoute("/style.css", new StaticController("/resources/css/style.css"));
         
         httpServer.createContext("/", new Handler(
                 router,
                 new ErrorController(), 
                 new NotFoundController()));
-        
-       /* final Router router = new StupidRouter(new IndexController(new ContactMemoryStorage()), new FaviconController());
-        final Controller errorController = new ErrorController();
-        final Controller notFoundController = new NotFoundController();
-        
-        httpServer.createContext("/", he -> {
-            try {
-                router.resolve(he.getRequestURI().getPath())
-                    .orElse(notFoundController).process(he);
-            } catch (Exception e) {
-                he.setAttribute(HttpExchangeAttributesEnum.Error.name(), e);
-                errorController.process(he);
-            }
-        });*/
-        httpServer.start();
-        
-        
+
+        httpServer.start(); 
     }
     
 }

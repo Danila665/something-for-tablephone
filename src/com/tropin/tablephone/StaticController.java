@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 public class StaticController implements Controller{
 
     private final String uri;
+    private String contenttype = "application/x-www-form-urlencoded";
 
     public StaticController(String string){
         uri = string;
@@ -28,19 +29,19 @@ public class StaticController implements Controller{
     @Override
     public void process(HttpExchange he) throws IOException {
         try {
-            //Path file = Paths.get(getClass().getResource("/resources/img/favicon.ico").toURI());
+            if (uri.contains(".ico")){
+                contenttype = "image/x-icon";
+            }
+            if (uri.contains(".css")){
+                contenttype = "text/css";
+            }
             Path file = Paths.get(getClass().getResource(uri).toURI());
-            he.getResponseHeaders().set("content-type", "text/css");
+            he.getResponseHeaders().set("content-type", contenttype);
             he.sendResponseHeaders(200, file.toFile().length());
             Files.copy(file, he.getResponseBody());
             he.close();    
         } catch (URISyntaxException e) {
            throw new IOException(e);
         }
-        
-        
-        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 }

@@ -6,4 +6,5 @@
 	<classpathentry kind="output" path="bin"/>
 	<classpathentry exported="true" kind="lib" path="lib/junit-platform-commons-1.4.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/junit-jupiter-api-5.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/sqlite-jdbc-3.27.2.1.jar"/>
 </classpath>

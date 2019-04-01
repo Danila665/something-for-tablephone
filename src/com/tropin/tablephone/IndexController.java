@@ -61,7 +61,7 @@ public class IndexController implements Controller {
             }
         }
 
-        HtmlView htmlview = new HtmlView();
+        HtmlView htmlview = new IndexView();
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("contactStorage", contactStorage);
         paramsMap.put("errors", errors);

@@ -15,46 +15,44 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 /**
  *
  * @author Danila
  */
 public class DbContactStorage implements ContactStorage{
-    
-    List<Contact> contacts = new ArrayList<>();
-    public Connection connect() { 
-        String url = "jdbc:sqlite:c://SQLite3/db.s3db";
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return conn;
+
+    final String STMT_INSERT = "INSERT INTO contacts(name,number) VALUES(?,?)";
+    final String STMT_SELECT = "SELECT id, name, number FROM contacts";
+
+    private DataSource dataSource;
+
+    public DbContactStorage(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
-    
+
     @Override
     public void add(Contact contact) {
-       String sql = "INSERT INTO contacts(name,number) VALUES(?,?)";
- 
-        try (Connection conn = this.connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        try (Connection conn = dataSource.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(STMT_INSERT)) {
             pstmt.setString(1, contact.getName().orElse("null"));
             pstmt.setString(2, contact.getNumber().orElse("null"));
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+
         }
     }
 
     @Override
     public Iterable<Contact> getAll() {
         List<Contact> contactsView = new ArrayList<>();
-        String sql = "SELECT id, name, number FROM contacts";
-        
-        try (Connection conn = this.connect();
+
+        try (Connection conn = dataSource.getConnection();
              Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql)){
+             ResultSet rs    = stmt.executeQuery(STMT_SELECT)){
             
             // loop through the result set
             while (rs.next()) {
@@ -65,8 +63,9 @@ public class DbContactStorage implements ContactStorage{
                 contactsView.add(contact);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
-        return contactsView;
+
+        return (Iterable<Contact>)contactsView;
     }
 }
